@@ -3,6 +3,9 @@ extends layout
 block content
 	h1= title
 	p Welcome to #{title}
+
+	if error
+		p= error
 	
 	form(action='/user/login', method='post')
 		div
@@ -12,12 +15,12 @@ block content
 			label(for='password') password
 			input(name='password', type='password')
 		div
-			input(type='submit', name='submit', value='log in')
+			input(class='log-in-submit', type='submit', name='submit', value='log in')
 	
 	form(action='/user/register', method='post')
 		div
-			label(for='name') first & last name
-			input(name='name', type='text')
+			label(for='fl_name') first & last name
+			input(name='fl_name', type='text')
 		div
 			label(for='email') email
 			input(name='email', type='text')
@@ -25,7 +28,7 @@ block content
 			label(for='password') password
 			input(name='password', type='password')
 		div
-			label(for='password_confirm') password confirmation
-			input(name='password_confirm', type='password')
+			label(for='password_confirmation') password confirmation
+			input(name='password_confirmation', type='password')
 		div
-			input(type='submit', name='submit', value='sign up')
+			input(class='sign-up-submit', type='submit', name='submit', value='sign up')

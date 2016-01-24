@@ -3,14 +3,18 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
+
+var flash = require('connect-flash');
 
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/nodetest1');
+var db = monk('localhost:27017/social-todo-1');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var dashboard = require('./routes/dashboard');
 
 var app = express();
 
@@ -23,8 +27,11 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('social-todo-1'));
+app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(flash());
 
 app.use(function(req, res, next) {
   req.db = db;
@@ -33,6 +40,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 app.use('/user', users);
+app.use('/dashboard', dashboard);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
