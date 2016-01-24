@@ -1,4 +1,5 @@
 var express = require('express');
+var crypto = require('crypto');
 var router = express.Router();
 
 router.post('/login', function(req, res, next) {
@@ -19,7 +20,7 @@ router.post('/login', function(req, res, next) {
         	res.redirect('/');
         	return;
         }
-        if (user.password === req.body.password) {
+        if (user.password === crypto.createHash('md5').update(req.body.password).digest("hex")) {
     		res.redirect("/dashboard");
     		return;
 		}
@@ -35,7 +36,7 @@ router.post('/register', function(req, res, next) {
 	collection.insert({
 		"fl_name": req.body.fl_name,
 		"email": req.body.email,
-		"password": req.body.password
+		"password": crypto.createHash('md5').update(req.body.password).digest("hex")
 	}, function (err, doc) {
         if (err) {
             res.send(err);
