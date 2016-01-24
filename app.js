@@ -32,7 +32,7 @@ app.use(function(req, res, next) {
 })
 
 app.use('/', routes);
-app.use('/users', users);
+app.use('/user', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
