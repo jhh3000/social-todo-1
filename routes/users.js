@@ -24,7 +24,8 @@ router.post('/login', function(req, res, next) {
     		res.redirect("/dashboard");
     		return;
 		}
-        res.send("NOT AUTHENTICATED");
+        res.redirect('/');
+        return;
     });
 
 })
@@ -33,16 +34,52 @@ router.post('/register', function(req, res, next) {
 
 	var collection = req.db.get('usercollection');
 
+	var fl_name = req.body.fl_name;
+	var email = req.body.email;
+	var password = req.body.password;
+
+	if (fl_name.length < 1) {
+		req.flash('error', 'Name is too short');
+	}
+	if (fl_name.length > 50) {
+		req.flash('error', 'Name is too long');
+	}
+	if (email.length < 1) {
+		req.flash('error', 'Email is too short');
+	}
+	if (email.length > 50) {
+		req.flash('error', 'Email is too long');
+	}
+	if (email.toLowerCase().match("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$.")) {
+		req.flash('error', 'Email format needs to be example@gmail.com')
+	}
+	if (password.length < 1) {
+		req.flash('error', 'Password is too short');
+	}
+	if (password.length > 50) {
+		req.flash('error', 'Password is too long');
+	}
+
+	var error = req.flash('error');
+	if (error) {
+		req.flash('error', error);
+		res.redirect("/");
+		return;
+	}
+	
+
 	collection.insert({
-		"fl_name": req.body.fl_name,
-		"email": req.body.email,
-		"password": crypto.createHash('md5').update(req.body.password).digest("hex")
+		"fl_name": fl_name,
+		"email": email,
+		"password": crypto.createHash('md5').update(password).digest("hex")
 	}, function (err, doc) {
         if (err) {
             res.send(err);
+            return;
         }
         else {
             res.redirect("/");
+            return;
         }
     });
 

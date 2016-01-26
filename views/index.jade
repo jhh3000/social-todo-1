@@ -5,7 +5,7 @@ block content
 	p Welcome to #{title}
 
 	if error
-		p= error
+		p(class='validation-error') #{error}
 	
 	form(action='/user/login', method='post')
 		div

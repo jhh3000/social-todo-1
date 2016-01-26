@@ -7,6 +7,7 @@ router.get('/', function(req, res, next) {
 		title: 'CPSC113 Todo',
 		error: req.flash('error')
 	});
+	return;
 });
 
 module.exports = router;
