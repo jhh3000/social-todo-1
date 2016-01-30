@@ -23,7 +23,7 @@ router.post('/login', function(req, res, next) {
         if (user.password === crypto.createHash('md5').update(req.body.password).digest("hex")) {
         	var sess = req.session;
         	sess.user = user;
-    		res.redirect("/tasks");
+    		res.redirect("/task");
     		return;
 		}
 		req.flash('error', 'Invalid password');
@@ -105,7 +105,7 @@ router.post('/register', function(req, res, next) {
 	        else {
 	            var sess = req.session;
 	        	sess.user = doc;
-	    		res.redirect("/tasks");
+	    		res.redirect("/task");
 	            return;
 	        }
 	    });

@@ -3,3 +3,40 @@ extends layout
 block content
 	h1= title
 	p Welcome, #{f_name}
+
+	for task in taskList
+		if task.complete
+			div(class='tasks-list-item complete-task') complete
+				span(class='task-title')= task.title
+				if task.user == email
+					a(class='delete-task', href='/task/delete/#{task._id}') delete
+				a(class='toggle-task', href='/task/toggle/#{task._id}') toggle
+		else
+			div(class='tasks-list-item') in progress
+				span(class='task-title')= task.title
+				if task.user == email
+					a(class='delete-task', href='/task/delete/#{task._id}') delete
+				a(class='toggle-task', href='/task/toggle/#{task._id}') toggle
+
+	if error
+		p(class='validation-error') #{error}
+	
+	form(action='/task/create', method='post')
+		div
+			label(for='title') title
+			input(name='title', type='text')
+		div
+			label(for='description') description
+			input(name='description', type='text')
+		div
+			label(for='collaborator1') collaborator1
+			input(name='collaborator1', type='text')
+		div
+			label(for='collaborator2') collaborator2
+			input(name='collaborator2', type='text')
+		div
+			label(for='collaborator3') collaborator3
+			input(name='collaborator3', type='text')
+		div
+			input(class='submit', type='submit', name='submit', value='submit')
+	

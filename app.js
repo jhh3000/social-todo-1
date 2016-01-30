@@ -40,7 +40,7 @@ app.use(function(req, res, next) {
 
 app.use('/', routes);
 app.use('/user', users);
-app.use('/tasks', tasks);
+app.use('/task', tasks);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
