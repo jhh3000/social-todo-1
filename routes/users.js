@@ -37,32 +37,38 @@ router.post('/register', function(req, res, next) {
 	var fl_name = req.body.fl_name;
 	var email = req.body.email;
 	var password = req.body.password;
+	var error = false;
 
 	if (fl_name.length < 1) {
 		req.flash('error', 'Name is too short');
+		error = true;
 	}
 	if (fl_name.length > 50) {
 		req.flash('error', 'Name is too long');
+		error = true;
 	}
 	if (email.length < 1) {
 		req.flash('error', 'Email is too short');
+		error = true;
 	}
 	if (email.length > 50) {
 		req.flash('error', 'Email is too long');
+		error = true;
 	}
 	if (email.toLowerCase().match("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$.")) {
-		req.flash('error', 'Email format needs to be example@gmail.com')
+		req.flash('error', 'Email format needs to be example@gmail.com');
+		error = true;
 	}
 	if (password.length < 1) {
 		req.flash('error', 'Password is too short');
+		error = true;
 	}
 	if (password.length > 50) {
 		req.flash('error', 'Password is too long');
+		error = true;
 	}
 
-	var error = req.flash('error');
 	if (error) {
-		req.flash('error', error);
 		res.redirect("/");
 		return;
 	}
