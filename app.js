@@ -20,7 +20,7 @@ var db = null;
 if (app.get('env') === 'development') {
   var db = monk('localhost:27017/social-todo-1');
 } else {
-  var db = monk('ds035965.mongolab.com:35965/heroku_b0kxcnt1');
+  var db = monk('social_app:social_app@ds035965.mongolab.com:35965/heroku_b0kxcnt1');
 }
 
 // view engine setup
