@@ -10,13 +10,18 @@ var flash = require('connect-flash');
 
 var mongo = require('mongodb');
 var monk = require('monk');
-var db = monk('localhost:27017/social-todo-1');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var tasks = require('./routes/tasks');
 
 var app = express();
+var db = null;
+if (app.get('env') === 'development') {
+  var db = monk('localhost:27017/social-todo-1');
+} else {
+  var db = monk('ds035965.mongolab.com:35965/heroku_b0kxcnt1');
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
