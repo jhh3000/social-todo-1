@@ -21,12 +21,25 @@ router.post('/login', function(req, res, next) {
         	return;
         }
         if (user.password === crypto.createHash('md5').update(req.body.password).digest("hex")) {
-    		res.redirect("/dashboard");
+        	var sess = req.session;
+        	sess.user = user;
+    		res.redirect("/tasks");
     		return;
 		}
+		req.flash('error', 'Invalid password');
         res.redirect('/');
         return;
     });
+
+})
+
+router.get('/logout', function(req, res, next) {
+
+	var sess = req.session;
+    if (sess.user) {
+    	sess.user = null;
+    }
+	res.redirect('/');
 
 })
 
@@ -72,21 +85,30 @@ router.post('/register', function(req, res, next) {
 		res.redirect("/");
 		return;
 	}
-	
 
-	collection.insert({
-		"fl_name": fl_name,
-		"email": email,
-		"password": crypto.createHash('md5').update(password).digest("hex")
-	}, function (err, doc) {
-        if (err) {
-            res.send(err);
-            return;
-        }
-        else {
-            res.redirect("/");
-            return;
-        }
+	collection.count({ "email": email },function(e, count) {
+		if (count > 0) {
+			req.flash('error', 'Account with this email already exists!');
+			res.redirect("/");
+			return;
+		}
+
+		collection.insert({
+			"fl_name": fl_name,
+			"email": email,
+			"password": crypto.createHash('md5').update(password).digest("hex")
+		}, function (err, doc) {
+	        if (err) {
+	            res.send(err);
+	            return;
+	        }
+	        else {
+	            var sess = req.session;
+	        	sess.user = doc;
+	    		res.redirect("/tasks");
+	            return;
+	        }
+	    });
     });
 
 })
